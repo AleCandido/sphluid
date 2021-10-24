@@ -14,6 +14,8 @@ MPI like [book](https://doc.rust-lang.org/book/ch16-00-concurrency.html).
     the number of threads), every time one has finished than is assigned a new
     chunk of size $min(remaining / t, threshold)$
 
+Better to use [`rayon`](https://github.com/rayon-rs/rayon)
+
 ## Serialization
 
 Simply use [`serde`](https://serde.rs/) with
