@@ -1,8 +1,12 @@
 use anyhow::Result;
+use std::{env, fs};
 
-pub fn create() -> Result<()> {
+fn create<P>(filepath: P) -> Result<()>
+where
+    P: AsRef<std::path::Path>,
+{
     // Create a new file with default settings
-    let mut file = netcdf::create("crabs.nc")?;
+    let mut file = netcdf::create(filepath)?;
 
     // We must create a dimension which corresponds to our data
     file.add_dimension("ncrabs", 10)?;
@@ -29,9 +33,12 @@ pub fn create() -> Result<()> {
     Ok(())
 }
 
-pub fn append() -> Result<()> {
+fn append<P>(filepath: P) -> Result<()>
+where
+    P: AsRef<std::path::Path>,
+{
     // Open an existing filea in append mode
-    let mut file = netcdf::append("crabs.nc")?;
+    let mut file = netcdf::append(filepath)?;
 
     let mut var = file.variable_mut("crab_coolness_level").unwrap();
 
@@ -39,6 +46,29 @@ pub fn append() -> Result<()> {
     var.put_values(&data, Some(&[2, 0]), None)?;
 
     println!("Appended data to crabs.nc");
+
+    Ok(())
+}
+
+#[test]
+fn test_create() -> anyhow::Result<()> {
+    let mut path = env::temp_dir();
+    path.push("crabs.nc");
+    create(&path)?;
+
+    fs::remove_file(path)?;
+
+    Ok(())
+}
+
+#[test]
+fn test_append() -> anyhow::Result<()> {
+    let mut path = env::temp_dir();
+    path.push("crabs-append.nc");
+    create(&path)?;
+    append(&path)?;
+
+    fs::remove_file(path)?;
 
     Ok(())
 }
