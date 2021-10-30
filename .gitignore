@@ -1,6 +1,9 @@
 # ignore data (netCDF) files
 *.nc
 
+# python
+__pycache__/
+
 # jupyter
 experiment.ipynb
 .ipynb_checkpoints

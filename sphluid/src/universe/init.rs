@@ -1,7 +1,7 @@
 use super::Universe;
 use crate::particle::Particle;
 
-use num::Float;
+use num::{cast, Float};
 use rand::Rng;
 
 use std::convert::TryInto;
@@ -12,22 +12,23 @@ where
     F: std::fmt::Debug,
 {
     let mut rng = rand::thread_rng();
-    let particles = vec![
-        Particle::new(
+    let mut particles = vec![];
+
+    for _ in 0..n {
+        particles.push(Particle::new(
             &(0..N)
                 .map(|_| rng.gen())
                 .collect::<Vec<F>>()
                 .try_into()
                 .unwrap(),
             &(0..N)
-                .map(|_| rng.gen())
+                .map(|_| rng.gen() - cast(0.5).unwrap())
                 .collect::<Vec<F>>()
                 .try_into()
                 .unwrap(),
-            rng.gen()
-        );
-        n
-    ];
+            rng.gen(),
+        ));
+    }
     return Universe { particles, time: 0 };
 }
 
