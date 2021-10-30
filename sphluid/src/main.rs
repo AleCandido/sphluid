@@ -10,8 +10,10 @@ fn main() -> Result<()> {
     create(&history_file, &uni)?;
 
     uni.snapshot(&history_file)?;
-    uni.trivial();
-    uni.snapshot(&history_file)?;
+    for _ in 0..100 {
+        uni.vacuum();
+        uni.snapshot(&history_file)?;
+    }
 
     Ok(())
 }
