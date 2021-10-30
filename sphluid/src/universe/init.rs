@@ -1,10 +1,10 @@
-use std::convert::TryInto;
+use super::Universe;
+use crate::particle::Particle;
 
-use super::particle::Particle;
-use super::universe::Universe;
 use num::Float;
-
 use rand::Rng;
+
+use std::convert::TryInto;
 
 pub fn random<F: Float, const N: usize>(n: usize) -> Universe<F, N>
 where

@@ -1,53 +1,29 @@
-use anyhow::Result;
+use super::universe::Universe;
 
-pub fn create<P>(filepath: P) -> Result<()>
+use anyhow::Result;
+use num::Float;
+
+pub fn create<P, F, const N: usize>(filepath: &P, uni: &Universe<F, N>) -> Result<()>
 where
     P: AsRef<std::path::Path>,
+    F: Float + netcdf::Numeric,
 {
     // Create a new file with default settings
     let mut file = netcdf::create(filepath)?;
-    let nparticles = 1e6 as usize;
 
-    // We must create a dimension which corresponds to our data
-    file.add_dimension("particle", nparticles)?;
-    // These dimensions can also be unlimited and will be resized when writing
+    println!("N: {}, particles: {}", N, uni.nparticles());
     file.add_unlimited_dimension("time")?;
+    file.add_dimension("axis", N)?;
+    file.add_dimension("particle", uni.nparticles())?;
 
-    // A variable can now be declared, and must be created from the dimension names.
-    let mut var = file.add_variable::<f32>("x", &["time", "particle"])?;
-    // Metadata can be added to the variable
-    var.add_attribute("description", "position")?;
+    let mut var_x = file.add_variable::<F>("x", &["time", "axis", "particle"])?;
+    var_x.add_attribute("description", "position")?;
+    let mut var_p = file.add_variable::<F>("p", &["time", "axis", "particle"])?;
+    var_p.add_attribute("description", "momenta")?;
+    let mut var_r = file.add_variable::<F>("r", &["time", "particle"])?;
+    var_r.add_attribute("description", "radii")?;
 
-    // Data can then be created and added to the variable
-    let data: Vec<f32> = vec![42.; nparticles];
-    var.put_values(&data, Some(&[0, 0]), None)?;
-    // (This puts data at offset (0, 0) until all the data has been consumed)
-
-    // Values can be added along the unlimited dimension, which
-    // resizes along the `time` axis
-    var.put_values(&data, Some(&[1, 0]), None)?;
-
-    let mut vary = file.add_variable::<f32>("y", &["time", "particle"])?;
-    vary.put_values(&data, Some(&[0, 0]), None)?;
-
-    println!("Written history.nc");
-
-    Ok(())
-}
-
-pub fn append<P>(filepath: P) -> Result<()>
-where
-    P: AsRef<std::path::Path>,
-{
-    // Open an existing filea in append mode
-    let mut file = netcdf::append(filepath)?;
-
-    let mut var = file.variable_mut("crab_coolness_level").unwrap();
-
-    let data: Vec<i32> = vec![42; 10];
-    var.put_values(&data, Some(&[2, 0]), None)?;
-
-    println!("Appended data to crabs.nc");
+    println!("created {}", filepath.as_ref().display());
 
     Ok(())
 }
