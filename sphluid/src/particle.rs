@@ -7,11 +7,11 @@ use num::Num;
 #[derive(Clone)]
 pub struct Particle<F: Num + Copy, const N: usize> {
     /// N-dimensional position
-    x: Array1<F>,
+    pub(crate) x: Array1<F>,
     /// N-dimensional space-phase
-    p: Array1<F>,
+    pub(crate) p: Array1<F>,
     /// Radius of the particle
-    r: F,
+    pub(crate) r: F,
 }
 
 impl<F: Num + Copy, const N: usize> Particle<F, N> {

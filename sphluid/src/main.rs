@@ -1,7 +1,7 @@
 use anyhow::Result;
-use sphluid::io::{append, create};
+use sphluid::io::create;
 
 fn main() -> Result<()> {
-    create()?;
-    append()
+    create("history.nc")?;
+    Ok(())
 }
