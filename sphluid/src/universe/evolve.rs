@@ -3,7 +3,7 @@ use super::Universe;
 use num::Float;
 use rayon::prelude::*;
 
-impl<F: Float + Send, const N: usize> Universe<F, N> {
+impl<F: Float + Send> Universe<F> {
     pub fn trivial(&mut self) {
         self.time += 1;
     }

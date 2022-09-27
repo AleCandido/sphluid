@@ -3,7 +3,7 @@ use super::universe::Universe;
 use anyhow::Result;
 use num::Float;
 
-pub fn create<P, F, const N: usize>(filepath: &P, uni: &Universe<F, N>) -> Result<()>
+pub fn create<P, F>(filepath: &P, uni: &Universe<F>) -> Result<()>
 where
     P: AsRef<std::path::Path>,
     F: Float + netcdf::Numeric,
@@ -11,9 +11,11 @@ where
     // Create a new file with default settings
     let mut file = netcdf::create(filepath)?;
 
-    println!("N: {}, particles: {}", N, uni.nparticles());
+    let naxes = uni.naxes();
+
+    println!("N: {}, particles: {}", naxes, uni.nparticles());
     file.add_unlimited_dimension("time")?;
-    file.add_dimension("axis", N)?;
+    file.add_dimension("axis", naxes)?;
     file.add_dimension("particle", uni.nparticles())?;
 
     let mut var_x = file.add_variable::<F>("x", &["time", "axis", "particle"])?;

@@ -5,7 +5,7 @@ use num::Num;
 /// It is generic over the physical space dimension `N` and the "field" `F` (usually `f32` is a
 /// good choice)
 #[derive(Clone)]
-pub struct Particle<F: Num + Copy, const N: usize> {
+pub struct Particle<F: Num + Copy> {
     /// N-dimensional position
     pub(crate) x: Array1<F>,
     /// N-dimensional space-phase
@@ -14,9 +14,9 @@ pub struct Particle<F: Num + Copy, const N: usize> {
     pub(crate) r: F,
 }
 
-impl<F: Num + Copy, const N: usize> Particle<F, N> {
+impl<F: Num + Copy> Particle<F> {
     ///
-    pub fn new(x: &[F; N], p: &[F; N], r: F) -> Self {
+    pub fn new(x: &[F], p: &[F], r: F) -> Self {
         Self {
             x: arr1(x),
             p: arr1(p),

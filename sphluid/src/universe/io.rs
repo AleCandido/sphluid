@@ -3,7 +3,7 @@ use super::Universe;
 use anyhow::Result;
 use num::Float;
 
-impl<F: Float, const N: usize> Universe<F, N>
+impl<F: Float> Universe<F>
 where
     F: netcdf::Numeric,
 {
@@ -13,8 +13,10 @@ where
     {
         let mut file = netcdf::append(&filepath)?;
 
+        let naxes = self.naxes();
+
         let mut var_x = file.variable_mut("x").unwrap();
-        for i in 0..N {
+        for i in 0..naxes {
             let axis_position: Vec<F> = self.particles.iter().map(|p| p.x[i]).collect();
 
             var_x.put_values(
@@ -25,7 +27,7 @@ where
         }
 
         let mut var_p = file.variable_mut("p").unwrap();
-        for i in 0..N {
+        for i in 0..naxes {
             let axis_momentum: Vec<F> = self.particles.iter().map(|p| p.p[i]).collect();
             var_p.put_values(
                 &axis_momentum,
