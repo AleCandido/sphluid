@@ -2,6 +2,8 @@ use super::particle::Particle;
 
 use num::Float;
 
+use std::path::Path;
+
 pub mod evolve;
 pub mod init;
 pub mod io;
@@ -12,13 +14,13 @@ pub struct Universe<F: Float + Copy, const N: usize> {
 }
 
 impl<F: Float + Copy, const N: usize> Universe<F, N> {
-    pub fn new(n: usize) -> Self {
-        let x = [num::zero(); N];
-        let p = [num::zero(); N];
-        let r = num::one();
+    pub fn new(path: &Path) -> Self {
+        Self::from_time(path, 0)
+    }
 
+    pub fn from_time(path: &Path, time: usize) -> Self {
         let particles = vec![Particle::new(&x, &p, r); n];
-        Self { particles, time: 0 }
+        Self { particles, time }
     }
 
     pub fn nparticles(&self) -> usize {

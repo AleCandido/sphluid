@@ -17,7 +17,7 @@ where
     file.add_dimension("particle", uni.nparticles())?;
 
     let mut var_x = file.add_variable::<F>("x", &["time", "axis", "particle"])?;
-    var_x.add_attribute("description", "position")?;
+    var_x.add_attribute("description", "positions")?;
     let mut var_p = file.add_variable::<F>("p", &["time", "axis", "particle"])?;
     var_p.add_attribute("description", "momenta")?;
     let mut var_r = file.add_variable::<F>("r", &["time", "particle"])?;
