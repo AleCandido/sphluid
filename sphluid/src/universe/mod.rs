@@ -1,25 +1,29 @@
 use super::particle::Particle;
 use crate::numeric::Number;
 
-use anyhow::Result;
+use pyo3::prelude::*;
 
-use std::path::Path;
+use std::path::PathBuf;
 
 pub mod evolve;
 pub mod io;
 
+#[pyclass]
 pub struct Universe {
     pub(crate) particles: Vec<Particle>,
     pub(crate) time: usize,
 }
 
+#[pymethods]
 impl Universe {
-    pub fn new(path: &Path) -> Result<Self> {
+    #[staticmethod]
+    pub fn new(path: PathBuf) -> Self {
         Self::from_time(path, 0)
     }
 
-    pub fn from_time(path: &Path, time: usize) -> Result<Self> {
-        let file = netcdf::open(path)?;
+    #[staticmethod]
+    pub fn from_time(path: PathBuf, time: usize) -> Self {
+        let file = netcdf::open(path).unwrap();
 
         let nparticles = file.dimension("particle").unwrap().len();
         let naxes = file.dimension("axis").unwrap().len();
@@ -27,21 +31,24 @@ impl Universe {
         let pos = file
             .variable("positions")
             .unwrap()
-            .values::<Number>(Some(&[time, 0, 0]), Some(&[1, naxes, nparticles]))?;
+            .values::<Number>(Some(&[time, 0, 0]), Some(&[1, naxes, nparticles]))
+            .unwrap();
         let mom = file
             .variable("momenta")
             .unwrap()
-            .values::<Number>(Some(&[time, 0, 0]), Some(&[1, naxes, nparticles]))?;
+            .values::<Number>(Some(&[time, 0, 0]), Some(&[1, naxes, nparticles]))
+            .unwrap();
         let rad = file
             .variable("radii")
             .unwrap()
-            .values::<Number>(Some(&[time, 0]), Some(&[1, nparticles]))?;
+            .values::<Number>(Some(&[time, 0]), Some(&[1, nparticles]))
+            .unwrap();
 
         let particles = Vec::new();
 
         // for x in pos.iter() {}
 
-        Ok(Self { particles, time })
+        Self { particles, time }
     }
 
     pub fn nparticles(&self) -> usize {
