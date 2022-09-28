@@ -1,14 +1,12 @@
 use anyhow::Result;
 use indicatif::ProgressBar;
 
-use sphluid::io::create;
-use sphluid::universe::init;
+use sphluid::universe::Universe;
 
 fn main() -> Result<()> {
-    let mut uni = init::random::<f64, 3>(1e4 as usize);
-
     let history_file = "history.nc";
-    create(&history_file, &uni)?;
+
+    let mut uni = Universe::<f64>::new(history_file.as_ref())?;
 
     let bar = ProgressBar::new(100);
 

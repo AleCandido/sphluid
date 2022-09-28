@@ -1,6 +1,7 @@
 use super::particle::Particle;
 
 use netcdf::error::Result;
+use netcdf::Numeric;
 use num::Float;
 
 use std::path::Path;
@@ -8,12 +9,12 @@ use std::path::Path;
 pub mod evolve;
 pub mod io;
 
-pub struct Universe<F: Float + Copy> {
+pub struct Universe<F: Float + Copy + Numeric> {
     pub(crate) particles: Vec<Particle<F>>,
     pub(crate) time: usize,
 }
 
-impl<F: Float + Copy> Universe<F> {
+impl<F: Float + Copy + Numeric> Universe<F> {
     pub fn new(path: &Path) -> Result<Self> {
         Self::from_time(path, 0)
     }
@@ -27,15 +28,19 @@ impl<F: Float + Copy> Universe<F> {
         let pos = file
             .variable("positions")
             .unwrap()
-            .values(Some(&[time, 0, 0]), Some(&[1, naxes, nparticles]))?;
+            .values::<F>(Some(&[time, 0, 0]), Some(&[1, naxes, nparticles]))?;
         let mom = file
             .variable("momenta")
             .unwrap()
-            .values(Some(&[time, 0, 0]), Some(&[1, naxes, nparticles]))?;
+            .values::<F>(Some(&[time, 0, 0]), Some(&[1, naxes, nparticles]))?;
         let rad = file
             .variable("radii")
             .unwrap()
-            .values(Some(&[time, 0]), Some(&[1, nparticles]))?;
+            .values::<F>(Some(&[time, 0]), Some(&[1, nparticles]))?;
+
+        let particles = Vec::new();
+
+        // for x in pos.iter() {}
 
         Ok(Self { particles, time })
     }
