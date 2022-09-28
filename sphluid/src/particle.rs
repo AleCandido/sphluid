@@ -1,22 +1,25 @@
+use crate::numeric::Number;
+
 use ndarray::{arr1, Array1};
-use num::Num;
+use pyo3::prelude::*;
 
 /// Represents a particle
 /// It is generic over the physical space dimension `N` and the "field" `F` (usually `f32` is a
 /// good choice)
+#[pyclass]
 #[derive(Clone)]
-pub struct Particle<F: Num + Copy> {
+pub struct Particle {
     /// N-dimensional position
-    pub(crate) x: Array1<F>,
+    pub(crate) x: Array1<Number>,
     /// N-dimensional space-phase
-    pub(crate) p: Array1<F>,
+    pub(crate) p: Array1<Number>,
     /// Radius of the particle
-    pub(crate) r: F,
+    pub(crate) r: Number,
 }
 
-impl<F: Num + Copy> Particle<F> {
+impl Particle {
     ///
-    pub fn new(x: &[F], p: &[F], r: F) -> Self {
+    pub fn new(x: &[Number], p: &[Number], r: Number) -> Self {
         Self {
             x: arr1(x),
             p: arr1(p),

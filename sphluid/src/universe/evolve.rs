@@ -1,10 +1,8 @@
 use super::Universe;
 
-use netcdf::Numeric;
-use num::Float;
 use rayon::prelude::*;
 
-impl<F: Float + Send + Numeric> Universe<F> {
+impl Universe {
     pub fn trivial(&mut self) {
         self.time += 1;
     }
