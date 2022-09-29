@@ -60,8 +60,8 @@ impl Universe {
     }
 
     /// Save snapshot of current configuration
-    pub fn dump(&self, filepath: PathBuf) {
-        let mut file = netcdf::append(&filepath).unwrap();
+    pub fn dump(&self) {
+        let mut file = netcdf::append(&self.path.clone().unwrap()).unwrap();
 
         let naxes = self.naxes();
 
