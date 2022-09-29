@@ -1,6 +1,5 @@
 use pyo3::prelude::*;
 
-pub mod io;
 pub mod numeric;
 pub mod particle;
 pub mod universe;

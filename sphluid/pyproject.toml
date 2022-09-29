@@ -21,6 +21,7 @@ classifiers = [
 dependencies = [
   "numpy>=1.16.0,<2.0.0",
   "xarray>=2022.6.0",
+  "netCDF4>=1.6.1,<2.0.0",
   "rich>=12.5.1,<13.0.0",
 ]
 

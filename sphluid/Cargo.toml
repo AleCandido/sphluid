@@ -18,9 +18,10 @@ crate-type = ["cdylib"]
 
 [dependencies]
 anyhow = "1.0.42"
+itertools = "0.10.5"
 ndarray = "0.15.3"
 netcdf = { version = "0.7.0", features = ["static"] }
 numpy = "0.16.2"
-pyo3 = { features = ["extension-module"], version = "0.16.4" }
+pyo3 = { features = ["extension-module", "multiple-pymethods"], version = "0.16.4" }
 rand = "0.8.4"
 rayon = "1.5.1"
