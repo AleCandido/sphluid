@@ -1,8 +1,11 @@
-from sphluid import init
-from sphluid.sphluid import Universe
+import pathlib
+
+from sphluid import init, Universe
+
+unipth = pathlib.Path("universe.nc").absolute()
 
 snap = init.random(3)
-#  snap.create_universe("ciao.nc")
-__import__("pdb").set_trace()
+snap.begin(unipth)
 
-uni = Universe.from_time("ciao.nc", 0)
+uni = Universe.from_time(unipth, 0)
+__import__("pdb").set_trace()

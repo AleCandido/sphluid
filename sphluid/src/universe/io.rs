@@ -22,8 +22,6 @@ impl Universe {
         let nparticles = file.dimension("particle").unwrap().len();
         let naxes = file.dimension("axis").unwrap().len();
 
-        println!("{}", naxes);
-
         let pos = file
             .variable("positions")
             .unwrap()

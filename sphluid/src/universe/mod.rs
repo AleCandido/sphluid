@@ -14,7 +14,9 @@ pub mod io;
 #[pyclass]
 pub struct Universe {
     pub(crate) particles: Vec<Particle>,
+    #[pyo3(get, set)]
     pub(crate) time: usize,
+    #[pyo3(get, set)]
     pub(crate) path: Option<PathBuf>,
 }
 
@@ -47,28 +49,29 @@ impl Universe {
         }
     }
 
+    #[getter]
     pub fn nparticles(&self) -> usize {
         self.particles.len()
     }
 
+    #[getter]
     pub fn naxes(&self) -> usize {
         self.particles[0].x.len()
     }
 
+    #[getter]
     pub fn positions<'py>(&self, py: Python<'py>) -> &'py PyArray2<Number> {
         self.pos().into_pyarray(py)
     }
 
+    #[getter]
     pub fn momenta<'py>(&self, py: Python<'py>) -> &'py PyArray2<Number> {
         self.mom().into_pyarray(py)
     }
 
+    #[getter]
     pub fn radii<'py>(&self, py: Python<'py>) -> &'py PyArray1<Number> {
         self.rad().into_pyarray(py)
-    }
-
-    pub fn path(&self) -> PathBuf {
-        self.path.clone().unwrap()
     }
 }
 

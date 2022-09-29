@@ -1,7 +1,9 @@
 use super::Universe;
 
+use pyo3::prelude::*;
 use rayon::prelude::*;
 
+#[pymethods]
 impl Universe {
     pub fn trivial(&mut self) {
         self.time += 1;
